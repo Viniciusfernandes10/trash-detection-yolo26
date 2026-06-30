@@ -1,0 +1,32 @@
+# Chaves SSH - NUNCA subir
+.ssh/
+*.pem
+id_rsa
+id_rsa.pub
+known_hosts
+
+# Pesos dos modelos (arquivos grandes)
+*.pt
+*.pth
+*.onnx
+
+# Dataset (muito pesado para o GitHub)
+*.zip
+*.tar.gz
+train/
+valid/
+test/
+data.yaml
+
+# Resultados brutos (só subir os gráficos)
+runs/
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Sistema
+.DS_Store
+Thumbs.db
