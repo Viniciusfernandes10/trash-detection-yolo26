@@ -117,5 +117,5 @@ model.train(
 
 ## 👤 Autor
 
-**Vinícius Fernandes**  
-Engenharia da Computação — UFRN
+**Vinícius Fernandes de Abreu**  
+
