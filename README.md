@@ -1,16 +1,16 @@
-# 🗑️ Detecção de Resíduos Recicláveis com YOLO26 e RF-DETR
+#  Detecção de Resíduos Recicláveis com YOLO26 e RF-DETR
 
 Projeto desenvolvido para a disciplina de **Visão Computacional** do curso de Engenharia da Computação da **UFRN**, com foco em detecção de objetos aplicada à triagem de resíduos recicláveis.
 
 ---
 
-## 📋 Descrição
+##  Descrição
 
 Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26** e **RF-DETR** — em um dataset de resíduos recicláveis com 58 classes (papel, plástico, vidro, metal, papelão e outras subcategorias), avaliando métricas como mAP@50, Precision e Recall.
 
 ---
 
-## 📦 Dataset
+##  Dataset
 
 - **Nome:** Trash Detection Dataset  
 - **Fonte:** [Roboflow Universe](https://universe.roboflow.com/mariam-elhoseny-s-workspace/trash-detection-yo22t)  
@@ -21,7 +21,7 @@ Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26
 
 ---
 
-## 🏗️ Metodologia
+##  Metodologia
 
 O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100`) via SLURM.
 
@@ -33,11 +33,11 @@ O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100
 | V2 | YOLO26s | 100 | 15.07% | 43.78% | 14.52% |
 | RF-DETR | RF-DETR Base | 50 | - | - | - |
 
-> ⏳ Resultados do RF-DETR serão atualizados após conclusão do treino.
+>  Resultados do RF-DETR serão atualizados após conclusão do treino.
 
 ---
 
-## 📊 Resultados
+##  Resultados
 
 ### YOLO26s — Baseline (50 epochs)
 
@@ -51,7 +51,7 @@ O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100
 
 ---
 
-## 🚀 Como Reproduzir
+##  Como Reproduzir
 
 ### Opção 1 — NPAD/UFRN (requer acesso ao cluster)
 
@@ -86,7 +86,7 @@ model.train(
 
 ---
 
-## 🛠️ Tecnologias
+##  Tecnologias
 
 - [Ultralytics YOLO26](https://github.com/ultralytics/ultralytics)
 - [RF-DETR](https://github.com/roboflow/rf-detr)
@@ -96,7 +96,7 @@ model.train(
 
 ---
 
-## 📄 Citação do Dataset
+##  Citação do Dataset
 
 ```bibtex
 @misc{ trash-detection-yo22t_dataset,
