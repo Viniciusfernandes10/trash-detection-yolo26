@@ -21,6 +21,34 @@ Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26
 
 ---
 
+##  Estrutura do Projeto
+
+```
+trash-detection-yolo26/
+├── README.md
+├── .gitignore
+├── notebooks/
+│   └── Trash_Detection.ipynb      ← notebook principal (Colab)
+├── scripts/
+│   ├── treino_yolo.sh             ← job SLURM YOLO26s 50 epochs
+│   ├── treino_yolo_v2.sh          ← job SLURM YOLO26s 100 epochs
+│   └── treino_rfdetr.sh           ← job SLURM RF-DETR 50 epochs
+└── results/
+    ├── yolo26_baseline/           ← resultados YOLO26s 50 epochs
+    │   ├── comparacao_baseline.png
+    │   ├── matriz_confusao_baseline.png
+    │   └── matriz_confusao_yolo_filtrada.png
+    ├── yolo26_100ep/              ← resultados YOLO26s 100 epochs
+    │   ├── comparacao_100ep.png
+    │   └── matriz_confusao_100ep.png
+    └── rfdetr/                    ← resultados RF-DETR 50 epochs
+        ├── comparacao_rfdetr_50ep.png
+        ├── matriz_confusao_rfdetr_50ep.png
+        └── matriz_confusao_rfdetr_filtrada.png
+```
+
+---
+
 ##  Metodologia
 
 O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100`, GPU NVIDIA A100) via SLURM.
@@ -35,7 +63,7 @@ O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100
 
 ---
 
-## 📊 Resultados
+##  Resultados
 
 ### YOLO26s — Baseline (50 epochs)
 
@@ -74,6 +102,28 @@ sbatch scripts/treino_yolo.sh
 sbatch scripts/treino_rfdetr.sh
 ```
 
+####  Comandos úteis no NPAD
+
+```bash
+# Verificar se o job está na fila/rodando
+squeue -u $USER
+
+# Acompanhar o progresso em tempo real
+tail -f ~/logs/treino_*.log
+
+# Verificar se o treino terminou com sucesso
+sacct -u $USER -j SEU_JOB_ID --format=JobID,State,ExitCode,Elapsed
+
+# Verificar os resultados salvos
+ls ~/resultados/trash_baseline/
+ls ~/resultados/trash_v2_100ep/
+ls ~/resultados/trash_rfdetr/
+
+# Ver as GPUs disponíveis no cluster
+sinfo -p gpu-4-a100
+sinfo -p gpu-8-v100
+```
+
 ### Opção 2 — Google Colab / Local
 
 ```python
@@ -105,6 +155,34 @@ model.train(
 
 ---
 
+##  Configuração do Ambiente RF-DETR no NPAD
+
+> ⚠️ O NPAD tem restrições de compilação que impedem instalar versões recentes do `albumentations`. Use exatamente as versões abaixo para evitar erros.
+
+```bash
+# Criar ambiente conda separado
+conda create -n rfdetr_env python=3.11 -y
+
+# PyTorch compatível com CUDA 12.1 do NPAD
+conda run -n rfdetr_env pip install torch torchvision \
+    --index-url https://download.pytorch.org/whl/cu121
+
+# RF-DETR e dependências
+conda run -n rfdetr_env pip install rfdetr
+conda run -n rfdetr_env pip install pytorch_lightning
+conda run -n rfdetr_env pip install faster_coco_eval
+conda run -n rfdetr_env pip install "albucore==0.0.23" --no-deps
+conda run -n rfdetr_env pip install "albumentations==1.4.3" \
+    "albucore==0.0.7" --no-deps
+conda run -n rfdetr_env pip install scikit-learn scikit-image \
+    imgaug qudida opencv-python-headless simsimd
+conda run -n rfdetr_env pip install pycocotools
+```
+
+>  O pacote `stringzilla` **não compila** no NPAD devido à versão do GCC. As versões antigas do `albucore` e `albumentations` acima contornam esse problema.
+
+---
+
 ##  Tecnologias
 
 - [Ultralytics YOLO26](https://github.com/ultralytics/ultralytics)
@@ -133,7 +211,3 @@ model.train(
 ```
 
 ---
-
-##  Autor
-
-**Vinícius Fernandes**  
