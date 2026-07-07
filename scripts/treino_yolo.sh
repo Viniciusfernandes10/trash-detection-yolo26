@@ -17,7 +17,7 @@ echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader)"
 
 pip install -q ultralytics
 
-mkdir -p /home/vfdabreu/resultados
+mkdir -p $HOME/resultados
 
 yolo detect train \
     model=yolo26s.pt \
