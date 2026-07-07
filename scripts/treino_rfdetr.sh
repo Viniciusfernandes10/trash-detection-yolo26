@@ -5,8 +5,8 @@
 #SBATCH --cpus-per-task=6
 #SBATCH --mem=32G
 #SBATCH --time=0-06:00
-#SBATCH --output=/home/vfdabreu/logs/treino_rfdetr_%j.log
-#SBATCH --error=/home/vfdabreu/logs/treino_rfdetr_%j.err
+#SBATCH --output=$HOME/logs/treino_rfdetr_%j.log
+#SBATCH --error=$HOME/logs/treino_rfdetr_%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -18,12 +18,12 @@ from rfdetr import RFDETRBase
 
 model = RFDETRBase()
 model.train(
-    dataset_dir="/home/vfdabreu/trash-detection",
+    dataset_dir="$HOME/trash-detection",
     epochs=50,
     batch_size=8,
     grad_accumulation_steps=2,
     lr=1e-4,
-    output_dir="/home/vfdabreu/resultados/trash_rfdetr",
+    output_dir="$HOME/resultados/trash_rfdetr",
 )
 PYTHON
 
