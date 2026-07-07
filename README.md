@@ -1,12 +1,12 @@
 #  Detecção de Resíduos Recicláveis com YOLO26 e RF-DETR
 
-Projeto desenvolvido para a disciplina de **Visão Computacional** do curso de Engenharia da Computação da **UFRN**, com foco em detecção de objetos aplicada à triagem de resíduos recicláveis.
+Projeto desenvolvido para a disciplina de **Visão Computacional** do curso de Ciência da Computação da **UFRN**, com foco em detecção de objetos aplicada à triagem de resíduos recicláveis.
 
 ---
 
 ##  Descrição
 
-Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26** e **RF-DETR** — em um dataset de resíduos recicláveis com 58 classes (papel, plástico, vidro, metal, papelão e outras subcategorias), avaliando métricas como mAP@50, Precision e Recall.
+Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26s** e **RF-DETR Base** — em um dataset de resíduos recicláveis com 55 classes, avaliando métricas como mAP@50, Precision e Recall.
 
 ---
 
@@ -14,16 +14,16 @@ Este projeto treina e compara dois modelos de detecção de objetos — **YOLO26
 
 - **Nome:** Trash Detection Dataset  
 - **Fonte:** [Roboflow Universe](https://universe.roboflow.com/mariam-elhoseny-s-workspace/trash-detection-yo22t)  
-- **Imagens:** ~4.300  
-- **Classes:** 58  
-- **Formato:** YOLOv11/YOLO26  
+- **Imagens:** 3.593  
+- **Classes:** 55  
+- **Formato:** YOLO26  
 - **Licença:** CC BY 4.0  
 
 ---
 
 ##  Metodologia
 
-O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100`) via SLURM.
+O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100`, GPU NVIDIA A100) via SLURM.
 
 ### Experimentos realizados
 
@@ -31,23 +31,28 @@ O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100
 |---|---|---|---|---|---|
 | Baseline | YOLO26s | 50 | 16.81% | 36.49% | 17.36% |
 | V2 | YOLO26s | 100 | 15.07% | 43.78% | 14.52% |
-| RF-DETR | RF-DETR Base | 50 | - | - | - |
-
->  Resultados do RF-DETR serão atualizados após conclusão do treino.
+| RF-DETR | RF-DETR Base | 50 | 25.74% | 28.06% | 26.16% |
 
 ---
 
-##  Resultados
+## 📊 Resultados
 
 ### YOLO26s — Baseline (50 epochs)
 
-![Curvas de treino](results/yolo26_baseline/curvas_treino.png)
-![Matriz de confusão](results/yolo26_baseline/matrizes_confusao.png)
+![Comparação Geral](results/yolo26_baseline/comparacao_baseline.png)
+![Matriz de Confusão](results/yolo26_baseline/matriz_confusao_baseline.png)
+![Matriz de Confusão Filtrada](results/yolo26_baseline/matriz_confusao_yolo_filtrada.png)
 
 ### YOLO26s — 100 epochs
 
-![Curvas de treino](results/yolo26_100ep/curvas_treino_100ep.png)
-![Matriz de confusão](results/yolo26_100ep/matrizes_confusao_100ep.png)
+![Comparação Geral](results/yolo26_100ep/comparacao_100ep.png)
+![Matriz de Confusão](results/yolo26_100ep/matriz_confusao_100ep.png)
+
+### RF-DETR Base — 50 epochs
+
+![Comparação Geral](results/rfdetr/comparacao_rfdetr_50ep.png)
+![Matriz de Confusão](results/rfdetr/matriz_confusao_rfdetr_50ep.png)
+![Matriz de Confusão Filtrada](results/rfdetr/matriz_confusao_rfdetr_filtrada.png)
 
 ---
 
@@ -57,20 +62,24 @@ O treinamento foi realizado no cluster **NPAD/IMD-UFRN** (partição `gpu-4-a100
 
 ```bash
 # 1. Enviar dataset para o NPAD
-scp -P 4422 "Trash detection.v2i.yolo26.zip" usuario@sc2.npad.ufrn.br:~/
+scp -P 4422 "Trash detection.v2i.yolo26.zip" SEU_USUARIO@sc2.npad.ufrn.br:~/
 
 # 2. Extrair dataset
 unzip "Trash detection.v2i.yolo26.zip" -d trash-detection
 
-# 3. Submeter job de treino
+# 3. Submeter job de treino YOLO26
 sbatch scripts/treino_yolo.sh
+
+# 4. Submeter job de treino RF-DETR
+sbatch scripts/treino_rfdetr.sh
 ```
 
 ### Opção 2 — Google Colab / Local
 
 ```python
 # Instalar dependências
-!pip install ultralytics
+!pip install ultralytics  # Para YOLO26
+!pip install rfdetr       # Para RF-DETR
 
 # Treinar YOLO26
 from ultralytics import YOLO
@@ -81,6 +90,16 @@ model.train(
     imgsz=640,
     batch=16,
     seed=42
+)
+
+# Treinar RF-DETR
+from rfdetr import RFDETRBase
+model = RFDETRBase()
+model.train(
+    dataset_dir="caminho/para/dataset",
+    epochs=50,
+    batch_size=8,
+    lr=1e-4
 )
 ```
 
@@ -115,7 +134,6 @@ model.train(
 
 ---
 
-## 👤 Autor
+##  Autor
 
-**Vinícius Fernandes de Abreu**  
-
+**Vinícius Fernandes**  
