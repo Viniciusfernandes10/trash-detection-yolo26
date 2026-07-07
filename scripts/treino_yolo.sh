@@ -5,8 +5,8 @@
 #SBATCH --cpus-per-task=6
 #SBATCH --mem=16G
 #SBATCH --time=0-03:00
-#SBATCH --output=/home/vfdabreu/logs/treino_%j.log
-#SBATCH --error=/home/vfdabreu/logs/treino_%j.err
+#SBATCH --output=$HOME/logs/treino_%j.log
+#SBATCH --error=$HOME/logs/treino_%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -21,12 +21,12 @@ mkdir -p /home/vfdabreu/resultados
 
 yolo detect train \
     model=yolo26s.pt \
-    data=/home/vfdabreu/trash-detection/data.yaml \
+    data=$HOME/trash-detection/data.yaml \
     epochs=50 \
     imgsz=640 \
     batch=16 \
     name=trash_baseline \
     seed=42 \
-    project=/home/vfdabreu/resultados
+    project=$HOME/resultados
 
 echo "Treino finalizado em $(date)"
